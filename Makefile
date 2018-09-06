@@ -2,7 +2,7 @@
 # with Go source code. If you know what GOPATH is then you probably
 # don't need to bother with make.
 
-.PHONY: geth android ios geth-cross swarm evm all test clean
+.PHONY: base geth thunder android ios geth-cross swarm evm all test clean
 .PHONY: geth-linux geth-linux-386 geth-linux-amd64 geth-linux-mips64 geth-linux-mips64le
 .PHONY: geth-linux-arm geth-linux-arm-5 geth-linux-arm-6 geth-linux-arm-7 geth-linux-arm64
 .PHONY: geth-darwin geth-darwin-386 geth-darwin-amd64
@@ -11,10 +11,16 @@
 GOBIN = $(shell pwd)/build/bin
 GO ?= latest
 
-geth:
+base:
 	build/env.sh go run build/ci.go install ./cmd/geth
 	@echo "Done building."
+
+geth: base
 	@echo "Run \"$(GOBIN)/geth\" to launch geth."
+
+thunder: base
+	@cd $(GOBIN) && ln -sf geth thunderlocal
+	@echo "Run \"$(GOBIN)/thunderlocal\" to launch thunder local chain."
 
 swarm:
 	build/env.sh go run build/ci.go install ./cmd/swarm
@@ -23,6 +29,7 @@ swarm:
 
 all:
 	build/env.sh go run build/ci.go install
+	@cd $(GOBIN) && ln -sf geth thunderlocal
 
 android:
 	build/env.sh go run build/ci.go aar --local
