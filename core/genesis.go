@@ -1,18 +1,62 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
-//
-// The go-ethereum library is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// The go-ethereum library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// Copyright 2018 Thunder Token Inc., The ThunderCore™ Authors
+// This file comprises an original work of authorship that may make use of, or
+// interface with another work licensed under a GNU or third party license, but
+// which is not otherwise based on said another work.
+
+// To the extent that portions of this file contains source code that is subject
+// to the terms of the GNU or third party license, the minimal corresponding source
+// code for those portions can be freely redistributed and/or modified under the
+// terms of the respective license, either of GNU Lesser General Public License version 3
+// or (at your option) any later version.
+
+// The remaining code for the ThunderCore™ network application is not a contribution
+// to be incorporated into said another work.  Rather, it is open source and licensed
+// from Thunder Token Inc. to you, the recipient, to copy, modify and distribute the
+// original or modified work without a fee, subject to reciprocity and recipient’s
+// (i) promise and covenant not to sue Thunder Token Inc., its assigns, successors,
+// affiliates and subsidiaries (hereinafter “Thunder Token”) on claims arising from
+// any of their use of recipient’s code, if any; (ii) promise and ongoing commitment
+// to not unfairly compete against or interfere with Thunder Token’s business or commercial
+// relationships; and (iii) promise and ongoing commitment to not challenge the validity,
+// enforceability, title, or ownership (by Thunder Token) of any intellectual property
+// rights arising from or relating to the ThunderCore™ network application.  Further, you,
+// the recipient, agree to and must do the following: (1) give prominent notice and
+// attribution to Thunder Token Inc. and the ThunderCore™ Authors for their work on the
+// original work and include any appropriate copyright, trademark, patent notices,
+// (2) accompany the original or modified work with a copy of this notice (TT license v1.0
+// or, at your option, any later version) in its entirety or a link directing the user to
+// the same, (3) accompany the modified work with a prominent notice indicating that it
+// has been modified and that it was based off of the original work; and (4) convey or
+// otherwise make freely available the source code corresponding to the modified work
+// under the same conditions and restrictions on the exercise of rights granted or
+// affirmed under this license.
+
+// Your copying, reverse-engineering, debugging, modifying, or distributing the original
+// or modified work constitutes assent and agreement to these terms.  You may not use this
+// file in any way except in compliance with the terms of this license.
+
+// The code is distributed AS-IS in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE or
+// TITLE or of non-infringement.  Thunder Token Inc. and any contributors to the software shall
+// not be liable for any direct, indirect, incidental, special, punitive, exemplary, or
+// consequential damages (including, without limitation, procurement of substitute goods or
+// services, loss of use, data or profits or business interruption) however caused and under
+// any theory of liability, whether in contract, strict liability, or tort (including negligence)
+// or otherwise arising in any way out of the use of or inability to use the software, even if
+// advised of the possibility of such damage.  The foregoing limitations of liability shall apply
+// even if deemed to fail of their essential purpose.  The software may only be distributed under
+// these terms and this disclaimer.
+
+// This license does not grant permission to use the trade names, trademarks, service marks, or
+// product names of ThunderCore™ or of Thunder Token Inc., except as required for reasonable and
+// customary use in describing the origin of the work and reproducing the content of this file.
+
+// Thunder Token Inc. and The ThunderCore™ Authors may publish revised and/or new versions of
+// this TT license from time to time.
+
+// You should have received a copy of the specific GNU license along with this file,
+// the ThunderCore™ library, or the go-ethereum library.  If not, then see, e.g.,
+// <https://www.gnu.org/licenses/lgpl-3.0.en.html> and/or <http://www.gnu.org/licenses/>.
 
 package core
 
@@ -337,8 +381,7 @@ func DefaultRinkebyGenesisBlock() *Genesis {
 // be seeded with the
 func DeveloperGenesisBlock(period uint64, faucet common.Address) *Genesis {
 	// Override the default period to the user requested one
-	config := *params.AllCliqueProtocolChanges
-	config.Clique.Period = period
+	config := *params.AllThunderProtocolChanges
 
 	// Assemble and return the genesis with the precompiles and faucet pre-funded
 	return &Genesis{
