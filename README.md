@@ -1,6 +1,20 @@
-## Thunder Local Chain
+## ThunderCore Local Chain
+We are proud to release ThunderCore Local Chain⚡️ to allow you to deploy and test your DApps on your local setup!
 
-For original Ethereum readme, please [check here](README_ETH.md)
+The ThunderCore Local Chain implementation is based on [go-ethereum](https://github.com/ethereum/go-ethereum) and contains a ThunderCore module which acts as an abstraction interface to ThunderCore’s consensus protocol([more details](#important)). Each Local Chain will run as a single node, so you can get the source code, build, and run in your local environment!
+
+![ThunderCore Local Chain](https://cdn-images-1.medium.com/max/1760/1*ZEDzxjT_uvhLwcTNf4_g0w.png)
+
+## <a name="important"></a>Important🚩
+ThunderCore Local Chain generates blocks with Thunder's block headers, but it does **NOT** implement ThunderCore’s consensus protocol _yet_. These local chains, therefore, do **NOT** include the proposal and voting process of the Thunder protocol _yet_. 
+
+To stay updated with ThunderCore's development and open-source efforts, visit our [website](https://www.thundercore.com/) and follow our social media.
+
+To learn more about ThunderCore's consensus engine:
+
+1. 🏃‍♀️In a rush? Read [Litepaper](https://docs.thundercore.com/thunder-litepaper.pdf)
+2. 👨‍💻Interested in protocol specification? Read [Whitepaper](https://docs.thundercore.com/thunder-whitepaper.pdf)
+3. 👩‍🔬Fan of security proofs? Read the full paper [Thunderella: Blockchains with Optimistic Instant Confirmation](https://eprint.iacr.org/2017/913.pdf)
 
 ## Building from source
 
@@ -10,7 +24,7 @@ Clone the repository to a directory on your local,
 
 Make sure you have Go compiler installed,
 
-on mac,
+on Mac OS,
 
     # brew install go
 
@@ -30,10 +44,10 @@ Build the whole suite,
 
     # make all
 
-## Start local chain
+## Start ThunderCore Local Chain
 
 ### Create an account
-Find a folder and run "thunderlocal account new " from shell and set a password when asked,
+Find a folder and run `thunderlocal account new` from shell and set a password when prompted,
 
     # thunderlocal account new --datadir ./datadir
     Your new account is locked with a password. Please give a password. Do not forget this password.
@@ -41,10 +55,10 @@ Find a folder and run "thunderlocal account new " from shell and set a password 
     Repeat passphrase:
     Address: {0af454242c456d1fc25c1d74a56a00a816ec336b}
 
-This command will create an account and account information is saved in ./datadir/keystore/UTC--XXX
+This command will create an account and account information is saved in `./datadir/keystore/UTC--XXX`
 
-### Create a genesis json file
-We can prefund the account created above. Please note the "alloc" block. And name the file as, for example thunder.json
+### Create a genesis JSON file
+We can prefund the account created above. Please note the `"alloc" `block. And name the file as, for example `thunder.json`
 
     {
         "config": {
@@ -70,7 +84,17 @@ We can prefund the account created above. Please note the "alloc" block. And nam
         "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
     }
 
-Please note the "thunder" block in the json file, which will use thunder consensus engine when starting a local chain. Alternatively, we can also create such genesis json file by [using setup wizard, puppeth](#puppeth).
+Please note the `"thunder"` block in the JSON file, which is reserved to utilize Thunder's consensus engine in the future. 
+
+
+For more information about ThunderCore's consensus engine:
+>
+1. For a high level understanding, read [Litepaper](https://docs.thundercore.com/thunder-litepaper.pdf)
+2. For a slightly more detailed protocol specification, read [Whitepaper](https://docs.thundercore.com/thunder-whitepaper.pdf)
+3. For security proofs, read the full paper [Thunderella: Blockchains with Optimistic
+Instant Confirmation](https://eprint.iacr.org/2017/913.pdf)
+
+Alternatively, we can also create such genesis JSON file by [using setup wizard, puppeth](#puppeth).
 
 ### <a name="initchain"></a>Initialize the chain
 
@@ -80,15 +104,15 @@ Please note the "thunder" block in the json file, which will use thunder consens
 
     # thunderlocal --datadir ./datadir  --networkid 3606 --rpc --rpcport "8545" --rpccorsdomain "*" --rpcapi "db,eth,net,miner,web3,personal" --nodiscover  --mine
 
-Now, you are good to go. Try to send some transactions or deploy smart contract.
+Now, you should be good to go!🎉 Try to send some transactions or deploy your smart contract!
 
 ### Interactive Javascript console
 
     # thunderlocal attach http://127.0.0.1:8545
 
-### <a name="puppeth"></a>Use puppeth to initialize genesis json config
+### <a name="puppeth"></a>Use puppeth to initialize genesis JSON config
 
-"puppeth" is built when you build the whole suite by running "make all". Start the wizard from command line,
+`puppeth` is built when you build the whole suite by running `make all`. Start the wizard from command line,
 
     # puppeth
 
