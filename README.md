@@ -20,7 +20,7 @@ To learn more about ThunderCore's consensus engine:
 
 Clone the repository to a directory on your local,
 
-    # git clone https://github.com/thundercore/go-ethereum.git
+    # git clone https://github.com/thundercore/thundercore-localchain.git
 
 Make sure you have Go compiler installed,
 
