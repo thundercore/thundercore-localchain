@@ -53,18 +53,11 @@ func (self *StateDB) RawDump() Dump {
 			panic(err)
 		}
 
-		obj := newObject(nil, common.BytesToAddress(addr), data)
 		account := DumpAccount{
 			Balance:  data.Balance.String(),
 			Nonce:    data.Nonce,
 			Root:     common.Bytes2Hex(data.Root[:]),
 			CodeHash: common.Bytes2Hex(data.CodeHash),
-			Code:     common.Bytes2Hex(obj.Code(self.db)),
-			Storage:  make(map[string]string),
-		}
-		storageIt := trie.NewIterator(obj.getTrie(self.db).NodeIterator(nil))
-		for storageIt.Next() {
-			account.Storage[common.Bytes2Hex(self.trie.GetKey(storageIt.Key))] = common.Bytes2Hex(storageIt.Value)
 		}
 		dump.Accounts[common.Bytes2Hex(addr)] = account
 	}
