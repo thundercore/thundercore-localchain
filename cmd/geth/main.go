@@ -196,6 +196,7 @@ func init() {
 		licenseCommand,
 		// See config.go
 		dumpConfigCommand,
+		dumpNonContractsCommand,
 	}
 	sort.Sort(cli.CommandsByName(app.Commands))
 

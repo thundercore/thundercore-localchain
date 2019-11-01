@@ -168,6 +168,21 @@ Remove blockchain and state databases`,
 The arguments are interpreted as block numbers or hashes.
 Use "ethereum dump 0" to dump the genesis block.`,
 	}
+	dumpNonContractsCommand = cli.Command{
+		Action:    utils.MigrateFlags(dumpNonContracts),
+		Name:      "dump-non-contracts",
+		Usage:     "Dump non contract accounts of a specific block from storage",
+		ArgsUsage: "[<blockHash> | <blockNum>]...",
+		Flags: []cli.Flag{
+			utils.DataDirFlag,
+			utils.CacheFlag,
+			utils.SyncModeFlag,
+		},
+		Category: "BLOCKCHAIN COMMANDS",
+		Description: `
+The arguments are interpreted as block numbers or hashes.
+Use "ethereum dump 0" to dump the genesis block.`,
+	}
 )
 
 // initGenesis will initialise the given JSON format genesis file and writes it as
@@ -459,6 +474,33 @@ func dump(ctx *cli.Context) error {
 				utils.Fatalf("could not create new state: %v", err)
 			}
 			fmt.Printf("%s\n", state.Dump())
+		}
+	}
+	chainDb.Close()
+	return nil
+}
+
+func dumpNonContracts(ctx *cli.Context) error {
+	stack := makeFullNode(ctx)
+	chain, chainDb := utils.MakeChain(ctx, stack)
+	for _, arg := range ctx.Args() {
+		var block *types.Block
+		if hashish(arg) {
+			block = chain.GetBlockByHash(common.HexToHash(arg))
+		} else {
+			num, _ := strconv.Atoi(arg)
+			block = chain.GetBlockByNumber(uint64(num))
+		}
+		if block == nil {
+			fmt.Println("{}")
+			utils.Fatalf("block not found")
+		} else {
+			state, err := state.New(block.Root(), state.NewDatabase(chainDb))
+			if err != nil {
+				utils.Fatalf("could not create new state: %v", err)
+			}
+			os.Stdout.Write(state.DumpNonContracts())
+			os.Stdout.Write([]byte("\n"))
 		}
 	}
 	chainDb.Close()
