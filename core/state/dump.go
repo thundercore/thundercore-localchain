@@ -18,6 +18,7 @@ package state
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 
@@ -81,6 +82,56 @@ func (self *StateDB) Dump() []byte {
 	return json
 }
 
+var ( // Thunder Pre-Compiled Contracts
+	commElectionTPCHash = sha256.Sum256([]byte("Thunder_CommitteeElection"))
+	// CommElectionTPCAddress is 0x30d87bd4D1769437880c64A543bB649a693EB348
+	CommElectionTPCAddress = common.BytesToAddress(commElectionTPCHash[:20])
+
+	vaultTPCHash = sha256.Sum256([]byte("Thunder_Vault"))
+	// VaultTPCAddress is 0xEC45c94322EaFEEB2Cf441Cd1aB9e81E58901a08
+	VaultTPCAddress = common.BytesToAddress(vaultTPCHash[:20])
+
+	randomTPCHash = sha256.Sum256([]byte("Thunder_Random"))
+	// RandomTPCAddress is 0x8cC9C2e145d3AA946502964B1B69CE3cD066A9C7
+	RandomTPCAddress = common.BytesToAddress(randomTPCHash[:20])
+
+	// from thunder/tests/utils/accounts.py
+	genesisAddress    = common.HexToAddress("0x9A78d67096bA0c7C1bCdc0a8742649Bc399119c0")
+	txStressAddress   = common.HexToAddress("0x4Bc87B58CfD96A4627a76C3dA5A8A26486eE7Fc9")
+	genesisWebAddress = common.HexToAddress("0xbb8718BE30d331A9D98E74C0FE92391dc2b437c3")
+	srcAddress        = common.HexToAddress("0xCD1191CAe116bDCBB24657c15C10aDfdb506aD85")
+	destAddress       = common.HexToAddress("0xb58972114Bf1624165ed8dF5eF755F8927dA4730")
+	txnFeeAddress     = common.HexToAddress("0xc4F3c85Bb93F33A485344959CF03002B63D7c4E3")
+	foundationAddress = common.HexToAddress("0x0000000000000000000000000000001234567989")
+	zeroAddress       = common.HexToAddress("0x0000000000000000000000000000000000000000")
+)
+
+func shouldIgnoreAddress(addr []byte) bool {
+	if IsPrecompiledContract(addr) {
+		return true
+	}
+	if bytes.Equal(addr, genesisAddress[:]) ||
+		bytes.Equal(addr, txStressAddress[:]) ||
+		bytes.Equal(addr, genesisWebAddress[:]) ||
+		bytes.Equal(addr, srcAddress[:]) ||
+		bytes.Equal(addr, destAddress[:]) ||
+		bytes.Equal(addr, txnFeeAddress[:]) ||
+		bytes.Equal(addr, foundationAddress[:]) ||
+		bytes.Equal(addr, zeroAddress[:]) {
+		return true
+	}
+	return false
+}
+
+func IsPrecompiledContract(addr []byte) bool {
+	if bytes.Equal(addr, CommElectionTPCAddress[:]) ||
+		bytes.Equal(addr, VaultTPCAddress[:]) ||
+		bytes.Equal(addr, RandomTPCAddress[:]) {
+		return true
+	}
+	return false
+}
+
 func (self *StateDB) RawDumpNonContracts() Dump {
 	dump := Dump{
 		Root:     fmt.Sprintf("%x", self.trie.Hash()),
@@ -90,6 +141,11 @@ func (self *StateDB) RawDumpNonContracts() Dump {
 	it := trie.NewIterator(self.trie.NodeIterator(nil))
 	for it.Next() {
 		addr := self.trie.GetKey(it.Key)
+
+		if shouldIgnoreAddress(addr) {
+			continue
+		}
+
 		var data Account
 		if err := rlp.DecodeBytes(it.Value, &data); err != nil {
 			panic(err)
@@ -98,6 +154,7 @@ func (self *StateDB) RawDumpNonContracts() Dump {
 		if !bytes.Equal(data.CodeHash, emptyCodeHash) {
 			continue
 		}
+
 		obj := newObject(nil, common.BytesToAddress(addr), data)
 		account := DumpAccount{
 			Balance:  data.Balance.String(),
