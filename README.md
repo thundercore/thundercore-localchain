@@ -1,3 +1,13 @@
+## DEPRECATED - no longer actively maintained
+
+Important🚩
+
+Important🚩
+
+Important🚩
+
+New ThunderCore developers guideline https://docs.developers.thundercore.com/
+
 ## ThunderCore Local Chain
 We are proud to release ThunderCore Local Chain⚡️ to allow you to deploy and test your DApps on your local setup!
 
